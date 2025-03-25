@@ -1,0 +1,124 @@
+# Dylan Brazil
+# April 17th 2024
+# This is an example of input and output for contact information with error
+# checking and looping so the user can add more than one contact information
+# or re-enter information if it's wrong and the new addition of using a
+# dictionary and a menu to have the user decide what to do, whether it's add a contact
+# to the log or find someone in the log, display all contacts, or just quit
+
+#User defined function to validate phone Number by using the amount of numbers in a phone number
+def validate_PHONE(phone_Number):
+    retValue = False
+    if len(phone_Number) == 10:
+        retValue = True
+
+    return retValue
+
+
+#User defined function to validate the email using the '@' symbol
+#This was so hard to figure out. Please don't mark it as not what was asked.
+def validate_MAIL(email_address):
+    if '@' in email_address:
+        retValue = True
+    else:
+        retValue = False
+
+    return retValue
+
+
+#the print menu - if True then it's being called upon to come up
+def contact_log(firstTime = False):
+    if firstTime:
+        print("Welcome to the Contact Logging Service,")
+
+    print("-------------------------------------------------")
+    print("Enter 'A' to add a contact")
+    print("Enter 'D' to display all contacts")
+    print("Enter 'F' to find a contact")
+    print("Enter 'Q' or anything else to quit")
+    print("-------------------------------------------------")
+
+#get the user command
+def get_command():
+    inCommand = input("Enter what you would like to do? \n")
+    return inCommand
+
+#this is to manage the loop control -  only the valid entrieds make allow it to continue
+def keepGoing(inCommand):
+    retValue = False
+    #converting inpput to uppercase so if they input lower case it wont quit program
+    if inCommand.upper() in ['A', 'D', 'F']:
+        retValue = True
+    return retValue
+
+
+
+
+#MAIN PROGRAM ---------------------
+# Initialize the contact log program
+names = {}
+
+#promting the user in a different way for contact details
+contact_log(True)
+theCommand = get_command()
+
+#while valid command, it will keep looping
+while keepGoing (theCommand) :
+
+    if theCommand.upper() == 'A':
+        #the name of contact, Number, and email address and what's inputted by user
+        name = (input("Name: "))
+        phone_Number = (input("Phone number: "))
+        email_address = (input("Email Address: "))
+
+        #validates the data entered
+        validate_phone_number = validate_PHONE(phone_Number)
+        validate_email_address = validate_MAIL(email_address)
+
+        #Output of the information that was entered before
+        print("")
+
+        #only output that the contact information was correct if it was correct
+        # and when invalid it will say so and what was invalid
+        if validate_phone_number and validate_email_address:   
+            print("Contact information added.\n")
+
+            names[name] = {'Name': name, 'Phone number': phone_Number, 'Email': email_address}    
+        else:
+            if validate_phone_number == False:
+                print("You put in the wrong phone number.")
+                
+            if validate_email_address == False:
+                print("You put in the wrong email.")
+                
+
+    elif theCommand.upper() == 'D':
+        #displaying all contacts
+        print("\nContacts:")
+        #looping through all values using the items() method
+        for name, contact_info in names.items():
+            print("Name:", name)
+            print("Phone number:", contact_info['Phone number'])
+            print("Email address:", contact_info['Email']) 
+            print()
+
+
+    elif theCommand.upper() == 'F':
+        #give the user a chance to search for a contact
+        search_user = input("Enter a persons name to search for them: ")
+
+        #check if the name is in contact log
+        if search_user in names:
+            contact_info = names[search_user]
+            print("\nName:", search_user)
+            print("Phone number:", contact_info['Phone number'])
+            print("Email address:", contact_info['Email'])
+            print()
+        else:
+            print("\nPerson not found in logs.\n")
+    contact_log()
+    theCommand = get_command()
+
+        
+print("Thanks for using the system.") 
+
